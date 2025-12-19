@@ -4,4 +4,10 @@ export const PUBLIC_SCREENS = [
 
   { name: "(public)/features", options: { headerShown: false } },
   { name: "(public)/cta", options: { headerShown: false } },
+  { name: "(auth)/login", options: { headerShown: false } },
+  { name: "(auth)/register", options: { headerShown: false } },
+];
+
+export const PROTECTED_SCREENS = [
+  { name: "settings", options: { headerShown: false } },
 ];
