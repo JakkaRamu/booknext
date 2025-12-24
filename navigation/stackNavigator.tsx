@@ -1,14 +1,16 @@
-import { PROTECTED_SCREENS, PUBLIC_SCREENS } from "@/config/screen.config";
+import { PUBLIC_SCREENS } from "@/config/screen.config";
 import { Stack } from "expo-router";
 
 interface StackNavigatorProps {
   background?: string;
   isLoggedIn: boolean;
+  text: string;
 }
 
 export const StackNavigator = ({
   background,
   isLoggedIn,
+  text,
 }: StackNavigatorProps) => {
   const renderScreens = (screen: (typeof PUBLIC_SCREENS)[0]) => {
     return (
@@ -30,9 +32,9 @@ export const StackNavigator = ({
         headerShadowVisible: false,
       }}
     >
-      <Stack.Protected guard={isLoggedIn}>
+      {/* <Stack.Protected guard={isLoggedIn}>
         {PROTECTED_SCREENS.map(renderScreens)}
-      </Stack.Protected>
+      </Stack.Protected> */}
 
       <Stack.Protected guard={!isLoggedIn}>
         {PUBLIC_SCREENS.map(renderScreens)}

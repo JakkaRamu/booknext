@@ -1,28 +1,80 @@
-import { useTheme } from "@/context/themeProvider";
-import React from "react";
-import { ViewStyle } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { useThemeColor } from "@/hooks/useThemeColors";
+import {
+  createResponsiveShadow,
+  useResponsiveStyle,
+} from "@/utils/styles/responsiveUI";
+import React, { useMemo } from "react";
+import { type ViewProps } from "react-native";
+import { Edge, SafeAreaView } from "react-native-safe-area-context";
 
-type ThemedSafeAreaViewProps = {
-  children: React.ReactNode;
-  style?: ViewStyle;
+export type ThemedSafeAreaViewProps = ViewProps & {
+  lightColor?: string;
+  darkColor?: string;
+  isDefault?: boolean;
+  isSecondary?: boolean;
+  showShadow?: boolean;
+  disableResponsive?: boolean;
+  edges?: Edge[];
 };
 
-export default function ThemedSafeAreaView({
-  children,
+export function ThemedSafeAreaView({
   style,
+  lightColor,
+  darkColor,
+  children,
+  isDefault,
+  isSecondary,
+  showShadow,
+  disableResponsive = false,
+  edges = ["top", "right", "left"],
+  ...otherProps
 }: ThemedSafeAreaViewProps) {
-  const { colors } = useTheme();
+  const backgroundColor = useThemeColor(
+    { light: lightColor, dark: darkColor },
+    isSecondary ? "secondary" : "background"
+  );
+
+  const defaultBackgroundColor = useThemeColor(
+    { light: lightColor, dark: darkColor },
+    "surface"
+  );
+
+  const borderColor = useThemeColor(
+    { light: lightColor, dark: darkColor },
+    "borderColor"
+  );
+
+  const shadowColor = useThemeColor(
+    { light: lightColor, dark: darkColor },
+    "text"
+  );
+
+  // Use shared responsive style hook
+  const scaledStyle = useResponsiveStyle(style, disableResponsive);
+
+  // Use shared shadow creator
+  const shadowStyles = useMemo(() => {
+    if (!showShadow) return {};
+    return createResponsiveShadow(shadowColor, disableResponsive);
+  }, [showShadow, shadowColor, disableResponsive]);
+
+  const finalBackgroundColor = isDefault
+    ? defaultBackgroundColor
+    : backgroundColor;
 
   return (
     <SafeAreaView
       style={[
         {
           flex: 1,
-          backgroundColor: colors.background,
+          backgroundColor: finalBackgroundColor,
+          borderColor,
         },
-        style,
+        shadowStyles,
+        scaledStyle,
       ]}
+      edges={edges}
+      {...otherProps}
     >
       {children}
     </SafeAreaView>

@@ -1,29 +1,27 @@
 import { LandingPageLoader } from "@/components/common/loaders/lazyLoading/landingPageLazyLoading";
-import { useTheme } from "@/context/themeProvider";
+
+import { ThemedSafeAreaView } from "@/components/theme/themedSafeAreaView";
 import { useLoginState } from "@/hooks/useLoginState";
+import { useThemeConfig } from "@/hooks/useThemeConfig";
 import { RootLayoutNavProps } from "@/interfaces/rootLayoutNavInterface";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { StackNavigator } from "./stackNavigator";
 
 export const RootLayoutNav = ({ onRootLayoutView }: RootLayoutNavProps) => {
-  const { colors } = useTheme();
+  const { background, text, statusBarStyle } = useThemeConfig();
   const { isLoggedIn, isLoading } = useLoginState();
+
   return (
-    <SafeAreaView
-      onLayout={onRootLayoutView}
-      style={{
-        flex: 1,
-        backgroundColor: colors.background,
-      }}
-    >
+    <ThemedSafeAreaView style={{ flex: 1 }} onLayout={onRootLayoutView}>
+      {/* StatusBar is handled by ThemeProvider to avoid conflicts */}
       {isLoading ? (
         <LandingPageLoader />
       ) : (
         <StackNavigator
-          background={colors.background}
+          background={background}
           isLoggedIn={isLoggedIn}
+          text={text}
         />
       )}
-    </SafeAreaView>
+    </ThemedSafeAreaView>
   );
 };

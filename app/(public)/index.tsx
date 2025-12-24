@@ -1,17 +1,13 @@
 import AppButton from "@/components/ui/appButton";
+import { Colors } from "@/constants/colors";
 import { useAuth } from "@/context/authProvider";
-import { useTheme } from "@/context/themeProvider";
+import { useAppTheme } from "@/context/themeProvider";
 
 import { Ionicons } from "@expo/vector-icons";
 import { Href, router } from "expo-router";
 import { useState } from "react";
-import {
-  Pressable,
-  StatusBar,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Pressable, Text, TouchableOpacity, View } from "react-native";
+
 import Animated, {
   FadeIn,
   FadeInDown,
@@ -38,11 +34,11 @@ const QUICK_LINKS: {
 
 export default function Welcome() {
   const [showMenu, setShowMenu] = useState(false);
-  const { colors: ThemeColors } = useTheme();
+  const theme = useAppTheme();
   const { user, logout } = useAuth();
   return (
     <Pressable
-      style={{ flex: 1, backgroundColor: ThemeColors.background }}
+      style={{ flex: 1, backgroundColor: Colors[theme].background }}
       onPress={() => {
         if (showMenu) setShowMenu(false);
       }}
@@ -50,14 +46,11 @@ export default function Welcome() {
       <View
         style={{
           flex: 1,
-          backgroundColor: ThemeColors.background,
+          backgroundColor: Colors[theme].background,
           justifyContent: "center",
           padding: 24,
         }}
       >
-        <StatusBar barStyle="light-content" />
-        {/* Top Right Sign In */}
-
         <Animated.View
           entering={FadeIn.delay(200)}
           style={{
@@ -85,7 +78,7 @@ export default function Welcome() {
               paddingVertical: 6,
               borderRadius: 20,
               borderWidth: 1,
-              borderColor: ThemeColors.outline,
+              borderColor: Colors[theme].outline,
               backgroundColor: "transparent",
               maxWidth: 140,
             }}
@@ -93,7 +86,7 @@ export default function Welcome() {
             <Ionicons
               name={user ? "person-circle-outline" : "log-in-outline"}
               size={18}
-              color={ThemeColors.primary}
+              color={Colors[theme].primary}
             />
 
             <Text
@@ -101,7 +94,7 @@ export default function Welcome() {
                 marginLeft: 6,
                 fontSize: 13,
                 fontWeight: "600",
-                color: ThemeColors.primary,
+                color: Colors[theme].primary,
               }}
               numberOfLines={1}
               ellipsizeMode="tail"
@@ -195,10 +188,10 @@ export default function Welcome() {
               top: 52,
               right: 16,
               width: 160,
-              backgroundColor: ThemeColors.surface,
+              backgroundColor: Colors[theme].surface,
               borderRadius: 14,
               borderWidth: 1,
-              borderColor: ThemeColors.outline,
+              borderColor: Colors[theme].outline,
               overflow: "hidden",
               zIndex: 100,
               elevation: 6,
@@ -226,14 +219,14 @@ export default function Welcome() {
               <Ionicons
                 name="log-out-outline"
                 size={18}
-                color={ThemeColors.primary}
+                color={Colors[theme].primary}
               />
               <Text
                 style={{
                   marginLeft: 12,
                   fontSize: 14,
                   fontWeight: "600",
-                  color: ThemeColors.primary,
+                  color: Colors[theme].primary,
                 }}
               >
                 Logout
@@ -244,7 +237,7 @@ export default function Welcome() {
             <View
               style={{
                 height: 1,
-                backgroundColor: ThemeColors.outline,
+                backgroundColor: Colors[theme].outline,
                 opacity: 0.4,
                 marginHorizontal: 12,
               }}
@@ -267,14 +260,14 @@ export default function Welcome() {
               <Ionicons
                 name="settings-outline"
                 size={18}
-                color={ThemeColors.primary}
+                color={Colors[theme].primary}
               />
               <Text
                 style={{
                   marginLeft: 12,
                   fontSize: 14,
                   fontWeight: "600",
-                  color: ThemeColors.primary,
+                  color: Colors[theme].primary,
                 }}
               >
                 Settings
@@ -291,7 +284,7 @@ export default function Welcome() {
             width: 56,
             height: 56,
             borderRadius: 14,
-            backgroundColor: ThemeColors.primary,
+            backgroundColor: Colors[theme].primary,
             justifyContent: "center",
             alignItems: "center",
             marginBottom: 20,
@@ -300,7 +293,7 @@ export default function Welcome() {
           <Ionicons
             name="book-outline"
             size={28}
-            color={ThemeColors.background}
+            color={Colors[theme].background}
           />
         </Animated.View>
 
@@ -310,7 +303,7 @@ export default function Welcome() {
             style={{
               fontSize: 18,
               fontWeight: "600",
-              color: ThemeColors.secondary,
+              color: Colors[theme].secondary,
               textAlign: "center",
               marginBottom: 6,
             }}
@@ -322,7 +315,7 @@ export default function Welcome() {
             style={{
               fontSize: 32,
               fontWeight: "800",
-              color: ThemeColors.primary,
+              color: Colors[theme].primary,
               textAlign: "center",
               marginBottom: 12,
             }}
@@ -333,7 +326,7 @@ export default function Welcome() {
           <Text
             style={{
               fontSize: 16,
-              color: ThemeColors.secondary,
+              color: Colors[theme].secondary,
               textAlign: "center",
               marginBottom: 28,
               lineHeight: 22,
@@ -362,26 +355,26 @@ export default function Welcome() {
                 onPress={() => router.push(item.route)}
                 activeOpacity={0.8}
                 style={{
-                  backgroundColor: ThemeColors.surface,
+                  backgroundColor: Colors[theme].surface,
                   borderRadius: 14,
                   paddingVertical: 16,
                   marginHorizontal: 4,
                   alignItems: "center",
                   borderWidth: 1.5,
-                  borderColor: ThemeColors.outline,
+                  borderColor: Colors[theme].outline,
                 }}
               >
                 <Ionicons
                   name={item.icon as any}
                   size={22}
-                  color={ThemeColors.primary}
+                  color={Colors[theme].primary}
                 />
                 <Text
                   style={{
                     marginTop: 8,
                     fontSize: 13,
                     fontWeight: "600",
-                    color: ThemeColors.primary,
+                    color: Colors[theme].primary,
                     textAlign: "center",
                   }}
                 >

@@ -1,5 +1,7 @@
+import { Colors } from "@/constants/colors";
 import { useAuth } from "@/context/authProvider";
-import { useTheme } from "@/context/themeProvider";
+import { useAppTheme } from "@/context/themeProvider";
+
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
@@ -12,7 +14,7 @@ type ItemProps = {
 };
 
 const SettingsItem = ({ icon, label, onPress, danger }: ItemProps) => {
-  const { colors } = useTheme();
+  const theme = useAppTheme();
 
   return (
     <TouchableOpacity
@@ -28,7 +30,7 @@ const SettingsItem = ({ icon, label, onPress, danger }: ItemProps) => {
       <Ionicons
         name={icon}
         size={20}
-        color={danger ? "#EF4444" : colors.primary}
+        color={danger ? "#EF4444" : Colors[theme].primary}
       />
 
       <Text
@@ -36,25 +38,29 @@ const SettingsItem = ({ icon, label, onPress, danger }: ItemProps) => {
           marginLeft: 14,
           fontSize: 15,
           fontWeight: "500",
-          color: danger ? "#EF4444" : colors.primary,
+          color: danger ? "#EF4444" : Colors[theme].primary,
           flex: 1,
         }}
       >
         {label}
       </Text>
 
-      <Ionicons name="chevron-forward" size={18} color={colors.secondary} />
+      <Ionicons
+        name="chevron-forward"
+        size={18}
+        color={Colors[theme].secondary}
+      />
     </TouchableOpacity>
   );
 };
 
 const SectionCard = ({ children }: { children: React.ReactNode }) => {
-  const { colors } = useTheme();
+  const theme = useAppTheme();
 
   return (
     <View
       style={{
-        backgroundColor: colors.surface,
+        backgroundColor: Colors[theme].surface,
         borderRadius: 14,
         marginHorizontal: 16,
         marginTop: 12,
@@ -67,7 +73,7 @@ const SectionCard = ({ children }: { children: React.ReactNode }) => {
 };
 
 const SectionTitle = ({ title }: { title: string }) => {
-  const { colors } = useTheme();
+  const theme = useAppTheme();
   return (
     <Text
       style={{
@@ -76,7 +82,7 @@ const SectionTitle = ({ title }: { title: string }) => {
         marginBottom: 6,
         fontSize: 13,
         fontWeight: "600",
-        color: colors.secondary,
+        color: Colors[theme].secondary,
         letterSpacing: 0.5,
       }}
     >
@@ -86,9 +92,8 @@ const SectionTitle = ({ title }: { title: string }) => {
 };
 
 export default function Settings() {
-  const { colors } = useTheme();
   const { logout } = useAuth();
-
+  const theme = useAppTheme();
   const handleLogout = () => {
     router.replace("/(public)");
     logout();
@@ -96,7 +101,7 @@ export default function Settings() {
 
   return (
     <ScrollView
-      style={{ flex: 1, backgroundColor: colors.background }}
+      style={{ flex: 1, backgroundColor: Colors[theme].background }}
       contentContainerStyle={{ paddingBottom: 40 }}
     >
       {/* Header */}
@@ -105,7 +110,7 @@ export default function Settings() {
           style={{
             fontSize: 28,
             fontWeight: "800",
-            color: colors.primary,
+            color: Colors[theme].primary,
           }}
         >
           Settings
@@ -113,7 +118,7 @@ export default function Settings() {
         <Text
           style={{
             marginTop: 6,
-            color: colors.secondary,
+            color: Colors[theme].secondary,
             fontSize: 14,
           }}
         >
@@ -147,7 +152,7 @@ export default function Settings() {
         <SettingsItem
           icon="moon-outline"
           label="Theme"
-          onPress={() => router.push("/(tabs)/theme" as any)}
+          onPress={() => router.push("/themeChoose" as any)}
         />
         <SettingsItem
           icon="notifications-outline"
@@ -198,7 +203,7 @@ export default function Settings() {
           textAlign: "center",
           marginTop: 32,
           fontSize: 12,
-          color: colors.secondary,
+          color: Colors[theme].secondary,
         }}
       >
         BookNext · v1.0.0

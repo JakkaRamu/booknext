@@ -1,81 +1,56 @@
-// import { DarkColors, LightColors } from "@/constants/colors";
-// import React, { createContext, useContext, useMemo, useState } from "react";
-// import { useColorScheme } from "react-native";
+import { THEME_DeFAULT } from "@/constants/commonConstants/appConstants";
+import { useThemeStore } from "@/hooks/useTheme";
 
-// type ThemeMode = "dark" | "light";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { StatusBar, useColorScheme } from "react-native";
 
-// type ThemeContextValue = {
-//   mode: ThemeMode;
-//   colors: typeof DarkColors;
-//   toggleTheme: () => void;
-// };
+const ThemeContext = createContext<"light" | "dark">("light");
 
-// const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
+export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
+  const systemTheme = useColorScheme();
+  const { theme: storedTheme, isLoading } = useThemeStore();
+  const [prevTheme, setPrevTheme] = useState<string | undefined>(undefined);
 
-// export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
-//   const systemScheme = useColorScheme();
-//   const [mode, setMode] = useState<ThemeMode>(
-//     systemScheme === "dark" ? "dark" : "light"
-//   );
+  // Determine the final theme
+  const finalTheme: "light" | "dark" =
+    storedTheme && storedTheme !== THEME_DeFAULT
+      ? (storedTheme as "light" | "dark")
+      : (systemTheme as "light" | "dark") || "light";
 
-//   const value = useMemo(
-//     () => ({
-//       mode,
-//       colors: mode === "dark" ? DarkColors : LightColors,
-//       toggleTheme: () =>
-//         setMode((prev) => (prev === "dark" ? "light" : "dark")),
-//     }),
-//     [mode]
-//   );
+  useEffect(() => {
+    if (storedTheme !== prevTheme) {
+      console.log(
+        "🎨 THEME CHANGED! Previous:",
+        prevTheme,
+        "-> New storedTheme:",
+        storedTheme,
+        "| systemTheme:",
+        systemTheme,
+        "| finalTheme:",
+        finalTheme
+      );
+      setPrevTheme(storedTheme);
+    }
+  }, [storedTheme, systemTheme, finalTheme, prevTheme]);
 
-//   return (
-//     <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
-//   );
-// };
-
-// export const useTheme = () => {
-//   const context = useContext(ThemeContext);
-//   if (!context) {
-//     throw new Error("useTheme must be used inside ThemeProvider");
-//   }
-//   return context;
-// };
-
-import { DarkColors, LightColors } from "@/constants/colors";
-import React, { createContext, useContext, useMemo } from "react";
-import { useColorScheme } from "react-native";
-
-type ThemeMode = "dark" | "light";
-
-type ThemeContextValue = {
-  mode: ThemeMode;
-  colors: typeof DarkColors;
-};
-
-const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
-
-export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
-  const systemScheme = useColorScheme();
-
-  const mode: ThemeMode = systemScheme === "dark" ? "dark" : "light";
-
-  const value = useMemo(
-    () => ({
-      mode,
-      colors: mode === "dark" ? DarkColors : LightColors,
-    }),
-    [mode]
-  );
+  if (isLoading) {
+    console.log("🎨 ThemeProvider loading...");
+    return null;
+  }
 
   return (
-    <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
+    <ThemeContext.Provider value={finalTheme}>
+      <StatusBar
+        barStyle={finalTheme === "light" ? "dark-content" : "light-content"}
+        translucent={true}
+        backgroundColor="transparent"
+      />
+
+      {children}
+    </ThemeContext.Provider>
   );
 };
 
-export const useTheme = () => {
-  const context = useContext(ThemeContext);
-  if (!context) {
-    throw new Error("useTheme must be used inside ThemeProvider");
-  }
-  return context;
-};
+export const useAppTheme = () => useContext(ThemeContext);

@@ -6,6 +6,8 @@ export const PUBLIC_SCREENS = [
   { name: "(public)/cta", options: { headerShown: false } },
   { name: "(auth)/login", options: { headerShown: false } },
   { name: "(auth)/register", options: { headerShown: false } },
+  { name: "settings", options: { headerShown: false } },
+  { name: "themeChoose", options: { headerShown: false } },
 ];
 
 export const PROTECTED_SCREENS = [

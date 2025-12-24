@@ -1,6 +1,6 @@
-import { useTheme } from "@/context/themeProvider";
+import { Colors } from "@/constants/colors";
 import { Ionicons } from "@expo/vector-icons";
-import { Text, View } from "react-native";
+import { Text, useColorScheme, View } from "react-native";
 
 const STEPS = [
   {
@@ -21,13 +21,13 @@ const STEPS = [
 ];
 
 export default function HowItWorks() {
-  const { colors: ThemeColors } = useTheme();
+  const theme = useColorScheme() ?? "light";
 
   return (
     <View
       style={{
         flex: 1,
-        backgroundColor: ThemeColors.background,
+        backgroundColor: Colors[theme].background,
         padding: 24,
       }}
     >
@@ -35,7 +35,7 @@ export default function HowItWorks() {
         style={{
           fontSize: 28,
           fontWeight: "800",
-          color: ThemeColors.primary,
+          color: Colors[theme].primary,
           marginBottom: 24,
           textAlign: "center",
         }}
@@ -47,7 +47,7 @@ export default function HowItWorks() {
         <View
           key={index}
           style={{
-            backgroundColor: ThemeColors.surface,
+            backgroundColor: Colors[theme].surface,
             borderRadius: 16,
             padding: 20,
             marginBottom: 16,
@@ -56,13 +56,13 @@ export default function HowItWorks() {
           <Ionicons
             name={step.icon as any}
             size={28}
-            color={ThemeColors.primary}
+            color={Colors[theme].primary}
           />
           <Text
             style={{
               fontSize: 18,
               fontWeight: "700",
-              color: ThemeColors.primary,
+              color: Colors[theme].primary,
               marginTop: 12,
             }}
           >
@@ -70,7 +70,7 @@ export default function HowItWorks() {
           </Text>
           <Text
             style={{
-              color: ThemeColors.secondary,
+              color: Colors[theme].secondary,
               marginTop: 6,
               lineHeight: 20,
             }}

@@ -1,6 +1,6 @@
-import { useTheme } from "@/context/themeProvider";
+import { Colors } from "@/constants/colors";
 import { Ionicons } from "@expo/vector-icons";
-import { Text, View } from "react-native";
+import { Text, useColorScheme, View } from "react-native";
 
 const FEATURES = [
   { icon: "location-outline", title: "Location-Based Feed" },
@@ -12,13 +12,13 @@ const FEATURES = [
 ];
 
 export default function Features() {
-  const { colors: ThemeColors } = useTheme();
+  const theme = useColorScheme() ?? "light";
 
   return (
     <View
       style={{
         flex: 1,
-        backgroundColor: ThemeColors.background,
+        backgroundColor: Colors[theme].background,
         padding: 24,
       }}
     >
@@ -26,7 +26,7 @@ export default function Features() {
         style={{
           fontSize: 28,
           fontWeight: "800",
-          color: ThemeColors.primary,
+          color: Colors[theme].primary,
           marginBottom: 24,
           textAlign: "center",
         }}
@@ -40,7 +40,7 @@ export default function Features() {
           style={{
             flexDirection: "row",
             alignItems: "center",
-            backgroundColor: ThemeColors.surface,
+            backgroundColor: Colors[theme].surface,
             padding: 18,
             borderRadius: 14,
             marginBottom: 14,
@@ -49,14 +49,14 @@ export default function Features() {
           <Ionicons
             name={item.icon as any}
             size={22}
-            color={ThemeColors.primary}
+            color={Colors[theme].primary}
           />
           <Text
             style={{
               marginLeft: 12,
               fontSize: 16,
               fontWeight: "600",
-              color: ThemeColors.primary,
+              color: Colors[theme].primary,
             }}
           >
             {item.title}

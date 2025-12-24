@@ -1,4 +1,5 @@
-import { useTheme } from "@/context/themeProvider";
+import { Colors } from "@/constants/colors";
+import { useAppTheme } from "@/context/themeProvider";
 import { Text, TouchableOpacity } from "react-native";
 
 type Props = {
@@ -14,7 +15,7 @@ export default function AppButton({
 }: Props) {
   const isOutline = variant === "outline";
 
-  const { colors: ThemeColors } = useTheme();
+  const theme = useAppTheme();
 
   return (
     <TouchableOpacity
@@ -23,16 +24,18 @@ export default function AppButton({
         marginTop: 16,
         paddingVertical: 14,
         borderRadius: 12,
-        backgroundColor: isOutline ? "transparent" : ThemeColors.primary,
-        borderWidth: isOutline ? 1 : 0,
-        borderColor: ThemeColors.outline,
+        backgroundColor: isOutline ? "transparent" : Colors[theme].primary,
+        borderWidth: isOutline ? 1.5 : 0,
+        borderColor: isOutline ? Colors[theme].outlineText : "transparent",
       }}
     >
       <Text
         style={{
           textAlign: "center",
           fontWeight: "600",
-          color: isOutline ? ThemeColors.primary : ThemeColors.background,
+          color: isOutline
+            ? Colors[theme].outlineText
+            : Colors[theme].background,
           fontSize: 16,
         }}
       >

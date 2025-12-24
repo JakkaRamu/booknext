@@ -1,16 +1,17 @@
 import AppButton from "@/components/ui/appButton";
-import { useTheme } from "@/context/themeProvider";
+import { Colors } from "@/constants/colors";
+
 import { router } from "expo-router";
-import { Text, View } from "react-native";
+import { Text, useColorScheme, View } from "react-native";
 
 export default function CTA() {
-  const { colors: ThemeColors } = useTheme();
+  const theme = useColorScheme() ?? "light";
 
   return (
     <View
       style={{
         flex: 1,
-        backgroundColor: ThemeColors.background,
+        backgroundColor: Colors[theme].background,
         justifyContent: "center",
         padding: 24,
       }}
@@ -19,7 +20,7 @@ export default function CTA() {
         style={{
           fontSize: 30,
           fontWeight: "800",
-          color: ThemeColors.primary,
+          color: Colors[theme].primary,
           textAlign: "center",
           marginBottom: 12,
         }}
@@ -29,7 +30,7 @@ export default function CTA() {
 
       <Text
         style={{
-          color: ThemeColors.secondary,
+          color: Colors[theme].secondary,
           textAlign: "center",
           marginBottom: 32,
           lineHeight: 22,
