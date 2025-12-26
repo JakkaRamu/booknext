@@ -1,7 +1,8 @@
 import { Colors } from "@/constants/colors";
 import { useAppTheme } from "@/context/themeProvider";
 import { Ionicons } from "@expo/vector-icons";
-import { Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
+import Animated, { FadeInUp } from "react-native-reanimated";
 
 const STEPS = [
   {
@@ -25,19 +26,21 @@ export default function HowItWorks() {
   const theme = useAppTheme();
 
   return (
-    <View
-      style={{
-        flex: 1,
+    <ScrollView
+      contentContainerStyle={{
+        flexGrow: 1,
         backgroundColor: Colors[theme].background,
         padding: 24,
+        justifyContent: "flex-start",
       }}
+      showsVerticalScrollIndicator={false}
     >
       <Text
         style={{
           fontSize: 28,
           fontWeight: "800",
           color: Colors[theme].primary,
-          marginBottom: 24,
+          marginBottom: 20,
           textAlign: "center",
         }}
       >
@@ -45,41 +48,62 @@ export default function HowItWorks() {
       </Text>
 
       {STEPS.map((step, index) => (
-        <View
+        <Animated.View
           key={index}
+          entering={FadeInUp.delay(120 * index)}
           style={{
+            flexDirection: "row",
+            alignItems: "center",
             backgroundColor: Colors[theme].surface,
-            borderRadius: 16,
-            padding: 20,
-            marginBottom: 16,
+            borderRadius: 14,
+            padding: 18,
+            marginBottom: 12,
+            shadowColor: "#000",
+            shadowOpacity: 0.06,
+            shadowRadius: 10,
+            elevation: 3,
           }}
         >
-          <Ionicons
-            name={step.icon as any}
-            size={28}
-            color={Colors[theme].primary}
-          />
-          <Text
+          <View
             style={{
-              fontSize: 18,
-              fontWeight: "700",
-              color: Colors[theme].primary,
-              marginTop: 12,
+              width: 52,
+              height: 52,
+              borderRadius: 12,
+              backgroundColor: Colors[theme].primary,
+              justifyContent: "center",
+              alignItems: "center",
+              marginRight: 14,
             }}
           >
-            {step.title}
-          </Text>
-          <Text
-            style={{
-              color: Colors[theme].secondary,
-              marginTop: 6,
-              lineHeight: 20,
-            }}
-          >
-            {step.desc}
-          </Text>
-        </View>
+            <Ionicons
+              name={step.icon as any}
+              size={22}
+              color={Colors[theme].background}
+            />
+          </View>
+
+          <View style={{ flex: 1 }}>
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: "700",
+                color: Colors[theme].primary,
+              }}
+            >
+              {step.title}
+            </Text>
+            <Text
+              style={{
+                color: Colors[theme].secondary,
+                marginTop: 6,
+                lineHeight: 20,
+              }}
+            >
+              {step.desc}
+            </Text>
+          </View>
+        </Animated.View>
       ))}
-    </View>
+    </ScrollView>
   );
 }
