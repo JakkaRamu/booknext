@@ -18,18 +18,18 @@ export default function ThemeSettings() {
   const systemTheme = "light"; // Replace with actual system theme detection if available
 
   useEffect(() => {
-    console.log("🎨 ThemeSettings screen - Current theme:", theme);
+    console.log("ThemeSettings screen - Current theme:", theme);
   }, [theme]);
 
   const handleThemeChange = (themeId: string) => {
-    console.log("🎨 User clicked theme:", themeId);
-    console.log("🎨 Mutation status before:", setTheme.status);
+    console.log("User clicked theme:", themeId);
+    console.log("Mutation status before:", setTheme.status);
     setTheme.mutate(themeId as "default" | "dark" | "light", {
       onSuccess: () => {
-        console.log("🎨 Mutation onSuccess callback fired!");
+        console.log(" Mutation onSuccess callback fired!");
       },
       onError: (error) => {
-        console.error("🎨 Mutation onError callback fired:", error);
+        console.error("Mutation onError callback fired:", error);
       },
     });
   };

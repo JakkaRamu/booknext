@@ -40,7 +40,7 @@ export default function Login() {
     try {
       const response = await loginUser({ email, password });
 
-      login({
+      await login({
         name: response.data.name || "User",
         email: response.data.email,
       });

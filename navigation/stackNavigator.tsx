@@ -1,4 +1,4 @@
-import { PUBLIC_SCREENS } from "@/config/screen.config";
+import { PROTECTED_SCREENS, PUBLIC_SCREENS } from "@/config/screen.config";
 import { Stack } from "expo-router";
 
 interface StackNavigatorProps {
@@ -22,23 +22,18 @@ export const StackNavigator = ({
     );
   };
 
+  const screensToRender = isLoggedIn ? PROTECTED_SCREENS : PUBLIC_SCREENS;
+
   return (
     <Stack
       screenOptions={{
         animation: "fade",
         contentStyle: { backgroundColor: background },
         headerStyle: { backgroundColor: background },
-
         headerShadowVisible: false,
       }}
     >
-      {/* <Stack.Protected guard={isLoggedIn}>
-        {PROTECTED_SCREENS.map(renderScreens)}
-      </Stack.Protected> */}
-
-      <Stack.Protected guard={!isLoggedIn}>
-        {PUBLIC_SCREENS.map(renderScreens)}
-      </Stack.Protected>
+      {screensToRender.map(renderScreens)}
     </Stack>
   );
 };

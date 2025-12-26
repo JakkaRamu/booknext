@@ -2,6 +2,7 @@ import AppButton from "@/components/ui/appButton";
 import { Colors } from "@/constants/colors";
 import { useAuth } from "@/context/authProvider";
 import { useAppTheme } from "@/context/themeProvider";
+import { useLoginState } from "@/hooks/useLoginState";
 
 import { Ionicons } from "@expo/vector-icons";
 import { Href, router } from "expo-router";
@@ -36,6 +37,9 @@ export default function Welcome() {
   const [showMenu, setShowMenu] = useState(false);
   const theme = useAppTheme();
   const { user, logout } = useAuth();
+  const { isLoggedIn } = useLoginState();
+
+  console.log("Welcome Screen - isLoggedIn:", isLoggedIn, user);
   return (
     <Pressable
       style={{ flex: 1, backgroundColor: Colors[theme].background }}
@@ -99,7 +103,7 @@ export default function Welcome() {
               numberOfLines={1}
               ellipsizeMode="tail"
             >
-              {user ? user.name : "Sign In"}
+              {isLoggedIn && user ? user.name : "Sign In"}
             </Text>
           </TouchableOpacity>
         </Animated.View>

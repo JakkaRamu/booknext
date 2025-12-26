@@ -10,6 +10,8 @@ export const RootLayoutNav = ({ onRootLayoutView }: RootLayoutNavProps) => {
   const { background, text, statusBarStyle } = useThemeConfig();
   const { isLoggedIn, isLoading } = useLoginState();
 
+  console.log("RootLayoutNav - isLoggedIn:", isLoggedIn);
+
   return (
     <ThemedSafeAreaView style={{ flex: 1 }} onLayout={onRootLayoutView}>
       {/* StatusBar is handled by ThemeProvider to avoid conflicts */}

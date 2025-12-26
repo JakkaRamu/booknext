@@ -9,6 +9,12 @@ export const useLoginState = () => {
     queryFn: async () => (await getItem(StorageKeys.IS_LOGGED_IN)) ?? false,
   });
 
+  console.log(
+    "useLoginState - isLoggedIn:",
+    isLoggedIn,
+    StorageKeys.IS_LOGGED_IN
+  );
+
   const setLoginState = useMutation({
     mutationFn: async (value: boolean) =>
       saveItem(StorageKeys.IS_LOGGED_IN, value),
