@@ -1,24 +1,65 @@
+import AlertBox from "@/components/common/alert/alertBox";
+import { useAlert } from "@/components/common/alert/useAlert";
 import AppButton from "@/components/ui/appButton";
 import { Colors } from "@/constants/colors";
 import { useAuth } from "@/context/authProvider";
 import { useAppTheme } from "@/context/themeProvider";
-
+import { loginUser } from "@/src/api/auth";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
+import { useState } from "react";
 import { Text, TextInput, View } from "react-native";
 
 export default function Login() {
   const theme = useAppTheme();
   const { login } = useAuth();
 
-  const handleLogin = () => {
-    //  mock login (replace with API)
-    login({
-      name: "Ram",
-      email: "ram@example.com",
-    });
+  const alert = useAlert();
 
-    router.replace("/(public)" as any);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async () => {
+    setError(null);
+
+    if (!email || !password) {
+      setError("Email and password are required");
+      alert.show(
+        "error",
+        "Validation Error",
+        "Please enter email and password"
+      );
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await loginUser({ email, password });
+
+      login({
+        name: response.data.name || "User",
+        email: response.data.email,
+      });
+      console.log("Logged in user:", response);
+      alert.show("success", "Login Successful", "Welcome back!");
+    } catch (err: any) {
+      setError(err.message || "Login failed");
+      alert.show("error", "Login Error", err.message || "Login failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAlertClose = () => {
+    alert.hide();
+
+    if (alert.type === "success") {
+      router.replace("/(public)" as any);
+    }
   };
 
   return (
@@ -62,27 +103,64 @@ export default function Login() {
           color: Colors[theme].primary,
           marginBottom: 16,
         }}
+        value={email}
+        onChangeText={setEmail}
+        autoCapitalize="none"
       />
 
-      {/* Password */}
+      {/* Password with Eye Toggle */}
       <Text style={{ color: Colors[theme].secondary, marginBottom: 6 }}>
         Password
       </Text>
-      <TextInput
-        placeholder="••••••••"
-        placeholderTextColor={Colors[theme].secondary}
-        secureTextEntry
+      <View
         style={{
+          flexDirection: "row",
+          alignItems: "center",
           backgroundColor: Colors[theme].surface,
           borderRadius: 12,
-          padding: 14,
-          color: Colors[theme].primary,
-          marginBottom: 24,
+          paddingHorizontal: 14,
+          marginBottom: 16,
         }}
-      />
+      >
+        <TextInput
+          placeholder="••••••••"
+          placeholderTextColor={Colors[theme].secondary}
+          secureTextEntry={!showPassword}
+          style={{
+            flex: 1,
+            paddingVertical: 14,
+            color: Colors[theme].primary,
+          }}
+          value={password}
+          onChangeText={setPassword}
+        />
+        <Ionicons
+          name={showPassword ? "eye-off-outline" : "eye-outline"}
+          size={20}
+          color={Colors[theme].secondary}
+          onPress={() => setShowPassword((p) => !p)}
+        />
+      </View>
+
+      {/* Inline Error */}
+      {error && (
+        <Text
+          style={{
+            color: "#EF4444",
+            marginBottom: 12,
+            textAlign: "center",
+            fontSize: 13,
+          }}
+        >
+          {error}
+        </Text>
+      )}
 
       {/* CTA */}
-      <AppButton title="Login" onPress={handleLogin} />
+      <AppButton
+        title={loading ? "Logging in..." : "Login"}
+        onPress={handleLogin}
+      />
 
       <Text
         style={{
@@ -94,11 +172,20 @@ export default function Login() {
         Don’t have an account?{" "}
         <Text
           style={{ color: Colors[theme].accent, fontWeight: "600" }}
-          onPress={() => router.push("/(auth)/register")}
+          onPress={() => router.replace("/(auth)/register")}
         >
           Sign up
         </Text>
       </Text>
+
+      {/* Custom Alert */}
+      <AlertBox
+        visible={alert.visible}
+        type={alert.type}
+        title={alert.title}
+        message={alert.message}
+        onClose={handleAlertClose}
+      />
     </View>
   );
 }

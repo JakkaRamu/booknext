@@ -1,6 +1,7 @@
 import { Colors } from "@/constants/colors";
+import { useAppTheme } from "@/context/themeProvider";
 import { Ionicons } from "@expo/vector-icons";
-import { Text, useColorScheme, View } from "react-native";
+import { Text, View } from "react-native";
 
 const STEPS = [
   {
@@ -21,7 +22,7 @@ const STEPS = [
 ];
 
 export default function HowItWorks() {
-  const theme = useColorScheme() ?? "light";
+  const theme = useAppTheme();
 
   return (
     <View

@@ -1,6 +1,7 @@
 import { Colors } from "@/constants/colors";
+import { useAppTheme } from "@/context/themeProvider";
 import { Ionicons } from "@expo/vector-icons";
-import { Text, useColorScheme, View } from "react-native";
+import { Text, View } from "react-native";
 
 const FEATURES = [
   { icon: "location-outline", title: "Location-Based Feed" },
@@ -12,7 +13,7 @@ const FEATURES = [
 ];
 
 export default function Features() {
-  const theme = useColorScheme() ?? "light";
+  const theme = useAppTheme();
 
   return (
     <View
